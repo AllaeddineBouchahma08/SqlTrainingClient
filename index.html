@@ -45,13 +45,18 @@
             display: block;
             border-radius: 8px;
             cursor: pointer;
-            transition: transform 0.3s ease; /* Smooth transition */
+            transition: all 0.3s ease; /* Smooth transition for both scale and position */
         }
 
-        /* Enlarge the image on click */
-        .enlarged {
-            transform: scale(1.5); /* Scale the image to 150% of its original size */
-            z-index: 10;
+        /* Fullscreen image on click */
+        .fullscreen {
+            position: fixed; /* Position it fixed to the screen */
+            top: 0;
+            left: 0;
+            width: 100vw; /* Full width of the viewport */
+            height: 100vh; /* Full height of the viewport */
+            object-fit: contain; /* Make sure the image scales nicely */
+            z-index: 1000; /* Ensure it appears on top of everything */
         }
 
         .sql-container {
@@ -110,7 +115,7 @@
         <!-- Database Schema Image Section -->
         <div class="image-container">
             <h3>Database Schema</h3>
-            <img src="screen.png" alt="Database Schema" id="schema-image" onclick="toggleImageSize()">
+            <img src="screen.png" alt="Database Schema" id="schema-image" onclick="toggleFullScreen()">
         </div>
 
         <!-- SQL Executor Section -->
@@ -126,10 +131,22 @@
     <!-- Link to external JavaScript -->
     <script src="script.js"></script>
     <script>
-        // Function to toggle the enlarged image
-        function toggleImageSize() {
+        // Function to toggle full-screen mode for the image
+        function toggleFullScreen() {
             var image = document.getElementById("schema-image");
-            image.classList.toggle("enlarged");
+            image.classList.toggle("fullscreen");
+
+            // If the image is fullscreen, add a click event to exit full-screen
+            if (image.classList.contains("fullscreen")) {
+                image.onclick = function() {
+                    image.classList.remove("fullscreen");
+                };
+            } else {
+                // Reset click function when exiting full-screen
+                image.onclick = function() {
+                    toggleFullScreen();
+                };
+            }
         }
     </script>
 </body>
