@@ -44,6 +44,14 @@
             height: auto;
             display: block;
             border-radius: 8px;
+            cursor: pointer;
+            transition: transform 0.3s ease; /* Smooth transition */
+        }
+
+        /* Enlarge the image on click */
+        .enlarged {
+            transform: scale(1.5); /* Scale the image to 150% of its original size */
+            z-index: 10;
         }
 
         .sql-container {
@@ -102,7 +110,7 @@
         <!-- Database Schema Image Section -->
         <div class="image-container">
             <h3>Database Schema</h3>
-            <img src="screen.png" alt="Database Schema">
+            <img src="screen.png" alt="Database Schema" id="schema-image" onclick="toggleImageSize()">
         </div>
 
         <!-- SQL Executor Section -->
@@ -117,5 +125,12 @@
     </div>
     <!-- Link to external JavaScript -->
     <script src="script.js"></script>
+    <script>
+        // Function to toggle the enlarged image
+        function toggleImageSize() {
+            var image = document.getElementById("schema-image");
+            image.classList.toggle("enlarged");
+        }
+    </script>
 </body>
 </html>
