@@ -4,8 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SQL Trainer</title>
-    <!-- Link to external CSS -->
-    <link rel="stylesheet" href="style.css">
     <style>
         /* Basic styling for layout */
         body {
@@ -33,35 +31,34 @@
 
         .image-container, .sql-container {
             flex: 1;
+            min-width: 300px; /* Minimum width for smaller screens */
+            max-width: 45%; /* Limit maximum width for larger screens */
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
             border-radius: 8px;
             background-color: #fff;
             padding: 20px;
+            box-sizing: border-box;
         }
 
         .image-container img {
             max-width: 100%;
-            height: auto;
+            max-height: calc(100% - 40px); /* Adjust for padding */
             display: block;
             border-radius: 8px;
             cursor: pointer;
-            transition: all 0.3s ease; /* Smooth transition for both scale and position */
+            transition: transform 0.3s ease; /* Smooth transition for scale effect */
         }
 
-        /* Fullscreen image on click */
-        .fullscreen {
-            position: fixed; /* Position it fixed to the screen */
-            top: 0;
-            left: 0;
-            width: 100vw; /* Full width of the viewport */
-            height: 100vh; /* Full height of the viewport */
-            object-fit: contain; /* Make sure the image scales nicely */
-            z-index: 1000; /* Ensure it appears on top of everything */
+        /* Scale the image slightly when the class is added */
+        .image-container img.scaled {
+            transform: scale(1.9); /* Scale the image */
         }
 
         .sql-container {
             display: flex;
             flex-direction: column;
+            max-width: 100%; /* Prevents the container from growing beyond its limit */
+            height: auto; /* Allows container to grow taller */
         }
 
         .sql-container h3 {
@@ -70,8 +67,8 @@
 
         textarea {
             width: 100%;
-            height: 150px;
-            resize: none;
+            min-height: 150px; /* Ensures the text area is at least 150px tall */
+            resize: vertical; /* Allows vertical resizing */
             padding: 10px;
             margin-bottom: 10px;
             font-size: 1rem;
@@ -107,6 +104,23 @@
         h1 {
             margin: 20px 0;
         }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .container {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .image-container, .sql-container {
+                max-width: 100%;
+                height: auto; /* Allow height to adjust */
+            }
+
+            .image-container img {
+                max-height: 300px; /* Limit image height on small screens */
+            }
+        }
     </style>
 </head>
 <body>
@@ -132,22 +146,13 @@
     <script src="script.js"></script>
     <script>
         // Function to toggle full-screen mode for the image
-        function toggleFullScreen() {
-            var image = document.getElementById("schema-image");
-            image.classList.toggle("fullscreen");
+        function toggleScale() {
+        var image = document.getElementById("schema-image");
+        image.classList.toggle("scaled");
+    }
 
-            // If the image is fullscreen, add a click event to exit full-screen
-            if (image.classList.contains("fullscreen")) {
-                image.onclick = function() {
-                    image.classList.remove("fullscreen");
-                };
-            } else {
-                // Reset click function when exiting full-screen
-                image.onclick = function() {
-                    toggleFullScreen();
-                };
-            }
-        }
+    // Attach the click event to toggle scaling
+    document.getElementById("schema-image").addEventListener("click", toggleScale);
     </script>
 </body>
 </html>
