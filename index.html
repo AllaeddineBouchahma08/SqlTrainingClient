@@ -3,21 +3,50 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SQL Trainer</title>
+    <title>Proglobby SQL Session Trainer</title>
     <style>
-        /* Basic styling for layout */
         body {
             font-family: Arial, sans-serif;
             margin: 0;
             padding: 0;
+            background-color: #121212;
+            color: #e0e0e0;
+        }
+        header {
             display: flex;
-            flex-direction: column;
             justify-content: center;
             align-items: center;
-            min-height: 100vh;
-            background-color: #f4f4f4;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 70px;
+            background-color: #1f1f1f;
+            color: #fff;
+            padding: 15px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
+            z-index: 1000;
         }
-
+    
+        header img {
+            height: 50px;
+            margin-right: 10px;
+        }
+    
+        footer {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 30px;
+            background-color: #1f1f1f;
+            color: #888;
+            padding: 10px 0;
+            text-align: center;
+            font-size: 0.9rem;
+            z-index: 1000;
+        }
+    
         .container {
             display: flex;
             flex-wrap: wrap;
@@ -26,56 +55,74 @@
             gap: 20px;
             width: 90%;
             max-width: 1200px;
-            margin: 20px 0;
+            margin: 120px auto 60px;
         }
 
         .image-container, .sql-container {
             flex: 1;
-            min-width: 300px; /* Minimum width for smaller screens */
-            max-width: 45%; /* Limit maximum width for larger screens */
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            min-width: 300px;
+            max-width: 45%;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.4);
             border-radius: 8px;
-            background-color: #fff;
+            background-color: #1f1f1f;
             padding: 20px;
             box-sizing: border-box;
         }
+    
+            .image-container {
+        position: relative;
+    }
 
         .image-container img {
             max-width: 100%;
-            max-height: calc(100% - 40px); /* Adjust for padding */
+            max-height: calc(100% - 40px);
             display: block;
             border-radius: 8px;
             cursor: pointer;
-            transition: transform 0.3s ease; /* Smooth transition for scale effect */
+            transition: transform 0.3s ease, top 0.3s ease, left 0.3s ease, z-index 0.3s ease;
+            z-index: 1; /* Default position */
         }
 
-        /* Scale the image slightly when the class is added */
         .image-container img.scaled {
-            transform: scale(1.9); /* Scale the image */
+                position: fixed; 
+                top: 50%; 
+                left: 50%; 
+                transform: translate(-50%, -50%) scale(1);
+                z-index: 9999; 
+                max-width: 90vw; 
+                max-height: 90vh; 
+                border-radius: 0; 
+                object-fit: contain; 
+                transition: transform 0.3s ease-in-out; 
         }
 
+
+    
+       
         .sql-container {
             display: flex;
             flex-direction: column;
-            max-width: 100%; /* Prevents the container from growing beyond its limit */
-            height: auto; /* Allows container to grow taller */
+            max-width: 100%;
+            height: auto;
         }
-
+    
         .sql-container h3 {
             margin-bottom: 10px;
         }
-
+    
         textarea {
             width: 100%;
-            min-height: 150px; /* Ensures the text area is at least 150px tall */
-            resize: vertical; /* Allows vertical resizing */
+            min-height: 150px;
+            resize: vertical;
             padding: 10px;
             margin-bottom: 10px;
             font-size: 1rem;
-            border: 1px solid #ccc;
+            border: 1px solid #333;
             border-radius: 5px;
+            background-color: #292929;
+            color: #e0e0e0;
         }
-
+    
         button {
             padding: 10px 20px;
             font-size: 1rem;
@@ -85,55 +132,56 @@
             border-radius: 5px;
             cursor: pointer;
         }
-
+    
         button:hover {
             background-color: #0056b3;
         }
-
+    
         #result-container {
             margin-top: 15px;
-            background-color: #f9f9f9;
-            border: 1px solid #ddd;
+            background-color: #292929;
+            border: 1px solid #333;
             border-radius: 5px;
             padding: 10px;
-            overflow-y: auto; /* Add scrolling */
-            max-height: 200px; /* Limit height */
-            width: 100%; /* Ensure it doesn't exceed container width */
+            overflow-y: auto;
+            max-height: 200px;
+            width: 100%;
+            color: #e0e0e0;
         }
-
+    
         h1 {
             margin: 20px 0;
         }
-
-        /* Responsive Design */
+    
         @media (max-width: 768px) {
             .container {
                 flex-direction: column;
                 align-items: center;
             }
-
+    
             .image-container, .sql-container {
                 max-width: 100%;
-                height: auto; /* Allow height to adjust */
+                height: auto;
             }
-
+    
             .image-container img {
-                max-height: 300px; /* Limit image height on small screens */
+                max-height: 300px;
             }
         }
     </style>
-</head>
+    </head>
 <body>
-    <h1>SQL Trainer</h1>
+    <header>
+        <img src="ProgLobbypsd.png" alt="Proglobby Logo" id="logo">
+        <h1>Proglobby SQL Session Trainer</h1>
+    </header>
+    
     <div class="container">
-        <!-- Database Schema Image Section -->
         <div class="image-container">
             <h3>Database Schema</h3>
-            <img src="screen.png" alt="Database Schema" id="schema-image" onclick="toggleFullScreen()">
+            <img src="screen.png" alt="Database Schema" id="schema-image" onclick="toggleScale()">
         </div>
-
-        <!-- SQL Executor Section -->
-        <div class="sql-container">
+    <div class="sql-container">
             <h3>SQL Query Executor</h3>
             <form onsubmit="runQuery(event)">
                 <textarea id="query" placeholder="Enter your SQL query here..."></textarea>
@@ -142,17 +190,15 @@
             <div id="result-container"></div>
         </div>
     </div>
-    <!-- Link to external JavaScript -->
+    <footer>
+        This website was created By Allaeddine BOUCHAHMA
+    </footer>
     <script src="script.js"></script>
     <script>
-        // Function to toggle full-screen mode for the image
         function toggleScale() {
-        var image = document.getElementById("schema-image");
-        image.classList.toggle("scaled");
-    }
-
-    // Attach the click event to toggle scaling
-    document.getElementById("schema-image").addEventListener("click", toggleScale);
+            var image = document.getElementById("schema-image");
+            image.classList.toggle("scaled");
+        }
     </script>
 </body>
 </html>
